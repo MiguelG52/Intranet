@@ -15,6 +15,7 @@ export enum PrivateRoutes {
   CURSOS = '/courses',
   ENCUESTAS = '/quiz',
   DOCUMENTOS = '/documents',
+  ADMIN = '/admin',
 }
 
 // Rutas de administración
