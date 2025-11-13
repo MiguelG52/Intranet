@@ -78,14 +78,16 @@ export async function logoutUser() {
 }
 
 /**
- * Obtiene la sesión del usuario actual desde el servidor.
- * Automáticamente intentará refrescar el token si está expirado.
+ * Obtiene el refreshToken del servidor
  */
-export async function getSession() {
-  try {
-    const user = await api.get('/users/me');
-    return { user };
+export async function getSession(): Promise<UserSignInInfo | null> {
+    try {
+    const user: UserSignInInfo = await api.get(`/auth/me`);
+    return user;
+
   } catch (error) {
-    return { user: null };
+    console.error('[GET_SESSION_ERROR]', error);
+    return null;
   }
 }
+

@@ -20,3 +20,5 @@ export interface SignInResponse {
   user: UserSignInInfo;
   refreshToken: string;
 }
+
+export interface UserPayload extends UserSignInInfo{}
