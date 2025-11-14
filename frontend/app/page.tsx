@@ -13,6 +13,4 @@ export default async function HomePage() {
     redirect('/login');
   }
 
-  // Este código nunca se ejecuta, pero evita el error de TypeScript
-  return null;
 }

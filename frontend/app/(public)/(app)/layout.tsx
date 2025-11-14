@@ -1,5 +1,6 @@
+import PublicSidebar from "@/components/common/sidebar/public-sidebar";
 import CustomSidebar from "@/components/common/sidebar/sidebar";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import RouteBreadcrumbs from "@/components/common/breadcrumbs/route-breadcrumbs";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { SessionProvider } from "@/lib/context/session-provider";
@@ -16,10 +17,11 @@ export default async function RootLayout({
   const cookieStore = await cookies()
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true"
 
+
   return (
     <SessionProvider>
       <SidebarProvider defaultOpen={defaultOpen}>
-        <CustomSidebar/>
+        <PublicSidebar />
         <SidebarInset>
               <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
               <div className="flex items-center gap-2 px-4">
@@ -28,19 +30,7 @@ export default async function RootLayout({
                   orientation="vertical"
                   className="mr-2 data-[orientation=vertical]:h-4"
                 />
-                <Breadcrumb>
-                  <BreadcrumbList>
-                    <BreadcrumbItem className="hidden md:block">
-                      <BreadcrumbLink href="#">
-                        Intranet
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator className="hidden md:block text-primary" />
-                    <BreadcrumbItem>
-                      <BreadcrumbPage>Inicio</BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </BreadcrumbList>
-                </Breadcrumb>
+                <RouteBreadcrumbs baseLabel="Intranet" baseHref="/home" />
               </div>
             </header>
           <main>

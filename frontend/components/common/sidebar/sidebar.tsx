@@ -1,9 +1,10 @@
 'use client'
-import { Sidebar, SidebarContent, SidebarGroup, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
+import { Sidebar, SidebarContent, SidebarGroup, SidebarHeader} from '@/components/ui/sidebar'
 import SidebarNavigation from './sidebarMenu'
-import { PrivateRoutes } from '@/lib/consts/routes'
-import { BookOpen, ClipboardList, Clock, FileText, Gift, Home, LucideProps, Settings, ShieldUserIcon, User, Users } from 'lucide-react'
+import { LucideProps } from 'lucide-react'
 import { ForwardRefExoticComponent, RefAttributes } from 'react'
+import SidebarUser from './sidebar-user'
+import { Separator } from '@/components/ui/separator'
 
 
 export type SidebarNavigationItem = {
@@ -12,25 +13,13 @@ export type SidebarNavigationItem = {
   icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
 }
 
-const CustomSidebar = () => {
-
-  const items: SidebarNavigationItem[] = [
-  { title: 'Inicio', url: PrivateRoutes.HOME, icon: Home },
-  { title: 'Perfil', url: PrivateRoutes.PROFILE, icon: User },
-  { title: 'Beneficios', url: PrivateRoutes.BENEFICIOS, icon: Gift },
-  { title: 'Directorio', url: PrivateRoutes.DIRECTORIO, icon: Users },
-  { title: 'Tiempo Libre', url: PrivateRoutes.TIEMPO_LIBRE, icon: Clock },
-  { title: 'Cursos', url: PrivateRoutes.CURSOS, icon: BookOpen },
-  { title: 'Encuestas', url: PrivateRoutes.ENCUESTAS, icon: ClipboardList },
-  { title: 'Documentos', url: PrivateRoutes.DOCUMENTOS, icon: FileText },
-  { title: 'Configuración', url: PrivateRoutes.SETTINGS, icon: Settings },
-  { title: 'Administración', url: PrivateRoutes.ADMIN, icon: ShieldUserIcon },
-]
-
+const CustomSidebar = ({ items }: { items: SidebarNavigationItem[] }) => {
 
   return (
     <Sidebar collapsible='icon' >
       <SidebarHeader>
+        <SidebarUser/>
+        <Separator/>
       </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
