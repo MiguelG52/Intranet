@@ -63,19 +63,27 @@ async function request(
         const newAccessToken = await getNewAccessToken();
         
         // Si lo logramos, guardamos el nuevo token en las cookies
-        (await cookies()).set('access_token', newAccessToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          path: '/',
-        });
+        try {
+          (await cookies()).set('access_token', newAccessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            path: '/',
+          });
+        } catch (error) {
+          // Ignoramos el error si estamos en un Server Component (no se pueden modificar cookies)
+        }
 
         // Reintentamos la petición original, ahora con el nuevo token
         return request(endpoint, options, true); 
       } catch (refreshError) {
         // Si el refresco falla, borramos las cookies y forzamos el logout
         console.error('Fallo al refrescar el token.', refreshError);
-        (await cookies()).delete('access_token');
-        (await cookies()).delete('refresh_token');
+        try {
+          (await cookies()).delete('access_token');
+          (await cookies()).delete('refresh_token');
+        } catch (error) {
+          // Ignoramos el error si estamos en un Server Component
+        }
         throw new Error('Sesión expirada. Por favor, inicia sesión de nuevo.');
       }
     }
