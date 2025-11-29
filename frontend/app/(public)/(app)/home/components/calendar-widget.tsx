@@ -12,7 +12,7 @@ export function CalendarWidget() {
           mode="single"
           selected={date}
           onSelect={setDate}
-          className="rounded-3xl shadow'md border w-full flex justify-center"
+          className="rounded-3xl shadow-md border w-full flex justify-center bg-white"
     />
   );
 }

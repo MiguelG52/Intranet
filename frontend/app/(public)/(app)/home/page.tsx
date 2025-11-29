@@ -12,7 +12,7 @@ const HomePage = () => {
   const isMobile = useIsMobile();
 
   return (
-    <div className="w-full max-w-[1600px] mx-auto p-4 md:p-6 space-y-8">
+    <div className="public-container">
       {/* Header Section */}
       <WelcomeHeader />
 

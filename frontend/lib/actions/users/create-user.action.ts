@@ -15,20 +15,19 @@ export async function createUser(data: CreateUserFormType) {
       name: data.name,
       lastname: data.lastname,
       email: data.email,
-      password: data.password,
       roleId: data.roleId,
       countryCode: data.countryCode,
       positionId: data.positionId,
-      detail: {
-        phoneNumber: data.phoneNumber,
-        birthdate: data.birthdate,
-      }
+      detail: data.phoneNumber || data.birthdate ? {
+        phoneNumber: data.phoneNumber || undefined,
+        birthdate: data.birthdate || undefined,
+      } : undefined,
     };
 
     await api.post('/auth/register', payload);
     
     revalidatePath('/admin/users');
-    return { success: true, message: 'Usuario creado correctamente' };
+    return { success: true, message: 'Usuario creado correctamente. Se envió la contraseña temporal por correo.' };
   } catch (error: any) {
     console.error('Error creating user:', error);
     return { success: false, message: error.message || 'Error al crear usuario' };

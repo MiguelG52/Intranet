@@ -33,7 +33,7 @@ const news = [
 
 export function NewsListWidget() {
   return (
-    <Card className="border-none shadow-sm">
+    <Card className="border-none shadow-lg">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-bold text-gray-800">
           Últimas Noticias

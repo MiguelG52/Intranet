@@ -49,3 +49,12 @@ export async function getPositionsByArea(areaId: string): Promise<Position[]> {
     return [];
   }
 }
+
+export async function getOrgChart(): Promise<any[]> {
+  try {
+    return await api.get('/position/structure/org-chart');
+  } catch (error) {
+    console.error('Error fetching org chart:', error);
+    return [];
+  }
+}

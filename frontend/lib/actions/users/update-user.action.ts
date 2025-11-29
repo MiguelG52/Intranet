@@ -8,10 +8,9 @@ export async function updateUser(userId: string, data: UpdateUserFormType) {
   try {
     const payload = {
       ...data,
-      password: data.password === '' ? undefined : data.password,
     };
-
-    await api.patch(`/users/${userId}`, payload);
+    console.log('Updating user with payload:', payload);
+    await api.patch(`/users/update/${userId}`, payload);
     revalidatePath('/admin/users');
     return { success: true, message: 'Usuario actualizado correctamente' };
   } catch (error: any) {

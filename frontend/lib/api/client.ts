@@ -42,13 +42,20 @@ async function request(
   if (accessToken) {
     defaultHeaders['Authorization'] = `Bearer ${accessToken}`;
   }
-
-
-  const res = await fetch(url, {
+  let res;
+  if(options.method !== 'GET'){
+     res = await fetch(url, {
+    cache: 'no-store',
     ...options,
     headers: defaultHeaders,
-    cache: 'no-store', 
   });
+  }else{
+    res = await fetch(url, {
+    cache: 'force-cache',
+    ...options,
+    headers: defaultHeaders,
+  });
+  }
 
   console.log('API Request:', res.url, res.status);
 
@@ -87,9 +94,6 @@ async function request(
         throw new Error('Sesión expirada. Por favor, inicia sesión de nuevo.');
       }
     }
-
-    const errorData = await res.json();
-    throw new Error(errorData.message || 'Error en la petición a la API');
   }
 
   if (res.status === 204) {

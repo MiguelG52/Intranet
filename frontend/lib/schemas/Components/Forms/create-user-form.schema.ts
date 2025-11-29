@@ -12,23 +12,8 @@ const baseUserSchema = z.object({
   birthdate: z.string().optional(),
 })
 
-export const createUserFormSchema = baseUserSchema.extend({
-  password: z
-    .string()
-    .min(8, "La contraseña debe tener al menos 8 caracteres")
-    .regex(/[0-9]/, "La contraseña debe contener al menos un número")
-    .regex(/[^a-zA-Z0-9]/, "La contraseña debe contener al menos un símbolo"),
-})
-
-export const updateUserFormSchema = baseUserSchema.extend({
-  password: z
-    .string()
-    .min(8, "La contraseña debe tener al menos 8 caracteres")
-    .regex(/[0-9]/, "La contraseña debe contener al menos un número")
-    .regex(/[^a-zA-Z0-9]/, "La contraseña debe contener al menos un símbolo")
-    .optional()
-    .or(z.literal('')),
-})
+export const createUserFormSchema = baseUserSchema
+export const updateUserFormSchema = baseUserSchema
 
 export type CreateUserFormType = z.infer<typeof createUserFormSchema>
 export type UpdateUserFormType = z.infer<typeof updateUserFormSchema>

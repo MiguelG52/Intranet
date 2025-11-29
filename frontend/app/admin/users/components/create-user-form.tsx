@@ -7,7 +7,7 @@ import { createUser } from '@/lib/actions/users/create-user.action';
 import { updateUser } from '@/lib/actions/users/update-user.action';
 import { getPositionsByArea } from '@/lib/actions/common/common.actions';
 import { Button } from '@/components/ui/button';
-import { Loader2, User, Mail, Lock, Globe, Briefcase, Phone, Calendar, Shield } from 'lucide-react';
+import { Loader2, User, Mail, Globe, Briefcase, Phone, Shield } from 'lucide-react';
 import FieldInput from '@/components/common/field-input/field-input';
 import SelectInput from '@/components/common/select-input/select-input';
 import DateInput from '@/components/common/date-input/date-input';
@@ -37,7 +37,6 @@ export function CreateUserForm({ roles, countries, positions: initialPositions, 
       name: user?.name || '',
       lastname: user?.lastname || '',
       email: user?.email || '',
-      password: '',
       roleId: user?.role?.roleId || '',
       countryCode: user?.country?.code || '',
       positionId: user?.position?.id || '',
@@ -93,8 +92,12 @@ export function CreateUserForm({ roles, countries, positions: initialPositions, 
     });
   };
 
+  const onError = (errors: any) => {
+    console.error("Errores de validación en el formulario:", errors);
+  };
+
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
+    <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-4 py-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FieldInput
           name="name"
@@ -123,14 +126,11 @@ export function CreateUserForm({ roles, countries, positions: initialPositions, 
         Icon={Mail}
       />
 
-      <FieldInput
-        name="password"
-        control={form.control}
-        type="password"
-        placeholder={isEditMode ? "******** (Dejar en blanco para mantener)" : "********"}
-        label="Contraseña"
-        Icon={Lock}
-      />
+      <p className="text-sm text-muted-foreground">
+        {isEditMode
+          ? 'La contraseña actual se mantiene sin cambios. Usa el flujo de recuperación si necesitas restablecerla.'
+          : 'La contraseña temporal se generará automáticamente y se enviará por correo al usuario.'}
+      </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <SelectInput

@@ -15,7 +15,7 @@ export function WelcomeHeader() {
   if (!date) return null;
 
   return (
-    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 bg-white p-6 rounded-lg shadow-sm border">
+    <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 bg-white p-6 rounded-lg shadow-md">
       <div>
         <Greeting name={user?.name || 'Usuario'} />
         <p className="text-gray-500 mt-1">
@@ -29,6 +29,6 @@ export function WelcomeHeader() {
           </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 }
