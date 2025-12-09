@@ -39,7 +39,7 @@ async function request(
     ...(options.headers as Record<string, string>),
   };
 
-  if (accessToken) {
+  if (accessToken && !defaultHeaders['Authorization']) {
     defaultHeaders['Authorization'] = `Bearer ${accessToken}`;
   }
   let res;
@@ -81,7 +81,13 @@ async function request(
         }
 
         // Reintentamos la petición original, ahora con el nuevo token
-        return request(endpoint, options, true); 
+        return request(endpoint, {
+          ...options,
+          headers: {
+            ...(options.headers as Record<string, string>),
+            Authorization: `Bearer ${newAccessToken}`,
+          },
+        }, true); 
       } catch (refreshError) {
         // Si el refresco falla, borramos las cookies y forzamos el logout
         console.error('Fallo al refrescar el token.', refreshError);

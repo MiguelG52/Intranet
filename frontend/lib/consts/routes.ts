@@ -31,4 +31,6 @@ export enum AdminRoutes {
   ADMIN_QUIZ = '/admin/quiz',
   ADMIN_DOCUMENTS = '/admin/documents',
   ADMIN_NEWS = '/admin/news',
+  ADMIN_COUNTRYS = '/admin/countrys',
+  ADMIN_ORGANIZATION = '/admin/organization',
 }

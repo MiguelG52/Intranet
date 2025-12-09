@@ -22,6 +22,7 @@ interface DataTableProps<TData, TValue> {
   searchPlaceholder?: string;
   pageCount?: number;
   customHeader?: React.ReactNode;
+  actions?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
@@ -31,6 +32,7 @@ export function DataTable<TData, TValue>({
   searchPlaceholder = 'Buscar...',
   pageCount = 1,
   customHeader,
+  actions,
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -75,18 +77,21 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between bg-white border rounded-3xl">
-        <Input
-          placeholder={searchPlaceholder}
-          value={searchTerm}
-          onChange={(event) => setSearchTerm(event.target.value)}
-          className="max-w-sm"
-        />
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center flex-1 ">
+          <Input
+            placeholder={searchPlaceholder}
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            className="max-w-sm  shadow-none bg-white border rounded-3xl px-3"
+          />
+        </div>
+        {actions}
       </div>
+      {customHeader}
       
       {renderRow ? (
         <div className="space-y-2">
-           {customHeader}
            {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <div key={row.id}>

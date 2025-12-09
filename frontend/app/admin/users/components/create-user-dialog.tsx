@@ -39,7 +39,7 @@ export function CreateUserDialog({ roles, countries, positions, areas, user, tri
       {!isControlled && (
         <DialogTrigger asChild>
             {trigger ? trigger : (
-            <Button>
+            <Button className="py-5">
                 <Plus className="mr-2 h-4 w-4" />
                 Nuevo Usuario
             </Button>

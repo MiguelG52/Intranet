@@ -7,7 +7,8 @@ import { Area, Position } from '@/lib/schemas/types/types';
 
 export async function getCountries(): Promise<Country[]> {
   try {
-    return await api.get('/country');
+    const response = await api.get('/country');
+    return Array.isArray(response) ? response : [];
   } catch (error) {
     console.error('Error fetching countries:', error);
     return [];
@@ -16,7 +17,8 @@ export async function getCountries(): Promise<Country[]> {
 
 export async function getRoles(): Promise<Role[]> {
   try {
-    return await api.get('/role');
+    const response = await api.get('/role');
+    return Array.isArray(response) ? response : [];
   } catch (error) {
     console.error('Error fetching roles:', error);
     return [];
@@ -25,7 +27,8 @@ export async function getRoles(): Promise<Role[]> {
 
 export async function getAreas(): Promise<Area[]> {
   try {
-    return await api.get('/areas/findAll');
+    const response = await api.get('/areas/findAll');
+    return Array.isArray(response) ? response : [];
   } catch (error) {
     console.error('Error fetching areas:', error);
     return [];
@@ -34,7 +37,8 @@ export async function getAreas(): Promise<Area[]> {
 
 export async function getPositions(): Promise<Position[]> {
   try {
-    return await api.get('/position');
+    const response = await api.get('/position');
+    return Array.isArray(response) ? response : [];
   } catch (error) {
     console.error('Error fetching positions:', error);
     return [];
@@ -43,7 +47,8 @@ export async function getPositions(): Promise<Position[]> {
 
 export async function getPositionsByArea(areaId: string): Promise<Position[]> {
   try {
-    return await api.get(`/position/area/${areaId}`);
+    const response = await api.get(`/position/area/${areaId}`);
+    return Array.isArray(response) ? response : [];
   } catch (error) {
     console.error(`Error fetching positions for area ${areaId}:`, error);
     return [];

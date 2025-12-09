@@ -11,10 +11,12 @@ export interface Role {
 export interface Area {
   areaId: string;
   areaName: string;
+  countryCode?: string;
 }
 
 export interface Position {
   positionId: string;
   title: string;
   areaId: string;
+  managerId?: string;
 }

@@ -36,9 +36,10 @@ interface UsersTableProps {
     countries: { code: string; name: string }[];
     positions: { id: string; title: string }[];
     areas: { areaId: string; areaName: string }[];
+    actions?: React.ReactNode;
 }
 
-export function UsersTable({ data, meta, roles, countries, positions, areas }: UsersTableProps) {
+export function UsersTable({ data, meta, roles, countries, positions, areas, actions }: UsersTableProps) {
   const memoizedData = useMemo(() => data, [data]);
   const [editingUser, setEditingUser] = useState<UserProfile | undefined>(undefined);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -149,6 +150,7 @@ export function UsersTable({ data, meta, roles, countries, positions, areas }: U
         searchPlaceholder="Buscar usuarios..."
         pageCount={meta.lastPage}
         customHeader={customHeader}
+        actions={actions}
       />
       
       {editingUser && (

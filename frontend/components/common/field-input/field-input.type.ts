@@ -11,4 +11,6 @@ export interface FieldInputProps<T extends FieldValues>{
     iconColor?: string;
     name:Path<T>;
     control:Control<T>;
+    disabled?: boolean;
+    description?: string;
 }
