@@ -5,6 +5,7 @@ import { deleteArea } from '@/lib/actions/organization/organization.actions'
 import { Area } from '@/lib/schemas/types/types'
 import { OrganizationListItem } from '../components/organization-list-item'
 import { Building2, Plus, Search } from 'lucide-react'
+import { AdminPageHeader } from '@/components/common/header/admin-page-header'
 import { AreaDialog } from './components/area-dialog'
 import { DeleteConfirmDialog } from '../components/delete-confirm-dialog'
 import { toast } from 'sonner'
@@ -66,24 +67,13 @@ export function AreasClientPage({ initialData }: AreasClientPageProps) {
 
   return (
     <div className="space-y-6">
-        <div className="flex flex-col md:flex-row justify-end items-center gap-4">
-            <div className="relative flex-1 md:w-64 md:flex-none">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input 
-                    placeholder="Buscar áreas..." 
-                    value={searchQuery}
-                    onChange={handleSearch}
-                    className="pl-9 rounded-xl border-gray-200 bg-white focus:bg-white transition-colors"
-                />
-            </div>
-            <Button 
-                onClick={() => setIsCreateOpen(true)}
-                className="rounded-xl bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20"
-            >
-                <Plus className="mr-2 h-4 w-4" />
-                Agregar Área
-            </Button>
-        </div>
+        <AdminPageHeader
+            searchPlaceholder="Buscar áreas..."
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            addButtonText="Agregar Área"
+            onAddClick={() => setIsCreateOpen(true)}
+        />
 
         <div className="space-y-4">
         {filteredData.map(area => (

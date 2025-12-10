@@ -53,7 +53,7 @@ export default function OrganizationLayout({
 
       <OrganizationNav />
 
-      <div className="min-h-[400px]">
+      <div className="min-h-[400px] rounded-3xl bg-white/50 p-6 shadow-xl ring-1 ring-gray-900/5 backdrop-blur-xl">
         {children}
       </div>
     </div>

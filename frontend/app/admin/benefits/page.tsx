@@ -1,9 +1,5 @@
+import { redirect } from 'next/navigation';
 
-
-const BenefitPage = () => {
-  return (
-    <div>BenefitPage</div>
-  )
+export default function BenefitsPage() {
+  redirect('/admin/benefits/list');
 }
-
-export default BenefitPage

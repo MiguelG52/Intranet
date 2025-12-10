@@ -7,32 +7,32 @@ import { revalidatePath } from "next/cache";
 
 // --- AREAS ---
 
-export async function createArea(data: AreaFormType) {
+export async function createArea(prevState: any, data: AreaFormType) {
   try {
     await api.post('/areas', data);
-    revalidatePath('/admin/organization');
-    return { success: true, message: 'Área creada correctamente' };
+    revalidatePath('/admin/organization/areas');
+    return { success: true, message: 'Área creada correctamente', timestamp: Date.now() };
   } catch (error: any) {
     console.error('Error creating area:', error);
-    return { success: false, message: error.message || 'Error al crear el área' };
+    return { success: false, message: error.message || 'Error al crear el área', timestamp: Date.now() };
   }
 }
 
-export async function updateArea(id: string, data: Partial<AreaFormType>) {
+export async function updateArea(id: string, prevState: any, data: Partial<AreaFormType>) {
   try {
     await api.patch(`/areas/${id}`, data);
-    revalidatePath('/admin/organization');
-    return { success: true, message: 'Área actualizada correctamente' };
+    revalidatePath('/admin/organization/areas');
+    return { success: true, message: 'Área actualizada correctamente', timestamp: Date.now() };
   } catch (error: any) {
     console.error('Error updating area:', error);
-    return { success: false, message: error.message || 'Error al actualizar el área' };
+    return { success: false, message: error.message || 'Error al actualizar el área', timestamp: Date.now() };
   }
 }
 
 export async function deleteArea(id: string) {
   try {
     await api.delete(`/areas/${id}`);
-    revalidatePath('/admin/organization');
+    revalidatePath('/admin/organization/areas');
     return { success: true, message: 'Área eliminada correctamente' };
   } catch (error: any) {
     console.error('Error deleting area:', error);
@@ -42,32 +42,32 @@ export async function deleteArea(id: string) {
 
 // --- POSITIONS ---
 
-export async function createPosition(data: PositionFormType) {
+export async function createPosition(prevState: any, data: PositionFormType) {
   try {
-    await api.post('/position', data);
-    revalidatePath('/admin/organization');
-    return { success: true, message: 'Puesto creado correctamente' };
+    await api.post('/position/register', data);
+    revalidatePath('/admin/organization/positions');
+    return { success: true, message: 'Puesto creado correctamente', timestamp: Date.now() };
   } catch (error: any) {
     console.error('Error creating position:', error);
-    return { success: false, message: error.message || 'Error al crear el puesto' };
+    return { success: false, message: error.message || 'Error al crear el puesto', timestamp: Date.now() };
   }
 }
 
-export async function updatePosition(id: string, data: Partial<PositionFormType>) {
+export async function updatePosition(id: string, prevState: any, data: Partial<PositionFormType>) {
   try {
     await api.patch(`/position/${id}`, data);
-    revalidatePath('/admin/organization');
-    return { success: true, message: 'Puesto actualizado correctamente' };
+    revalidatePath('/admin/organization/positions');
+    return { success: true, message: 'Puesto actualizado correctamente', timestamp: Date.now() };
   } catch (error: any) {
     console.error('Error updating position:', error);
-    return { success: false, message: error.message || 'Error al actualizar el puesto' };
+    return { success: false, message: error.message || 'Error al actualizar el puesto', timestamp: Date.now() };
   }
 }
 
 export async function deletePosition(id: string) {
   try {
     await api.delete(`/position/${id}`);
-    revalidatePath('/admin/organization');
+    revalidatePath('/admin/organization/positions');
     return { success: true, message: 'Puesto eliminado correctamente' };
   } catch (error: any) {
     console.error('Error deleting position:', error);

@@ -4,30 +4,27 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState, useActionState, startTransition, useRef } from "react";
-import { AreaFormType, areaFormSchema } from "@/lib/schemas/Components/Forms/area-form.schema";
-import { createArea, updateArea } from "@/lib/actions/organization/organization.actions";
-import { getCountries } from "@/lib/actions/common/common.actions";
-import { Area, Country } from "@/lib/schemas/types/types";
+import { BenefitTypeFormType, benefitTypeFormSchema } from "@/lib/schemas/Components/Forms/benefit-type-form.schema";
+import { createBenefitType, updateBenefitType } from "@/lib/actions/benefits/benefits.actions";
+import { BenefitType } from "@/lib/schemas/types/types";
 import FieldInput from "@/components/common/field-input/field-input";
-import SelectInput from "@/components/common/select-input/select-input";
 import { toast } from "sonner";
-import { Globe } from "lucide-react";
+import { Tag, FileText } from "lucide-react";
 
-interface AreaFormProps {
-  initialData?: Area;
+interface BenefitTypeFormProps {
+  initialData?: BenefitType;
   onSuccess: () => void;
 }
 
-export function AreaForm({ initialData, onSuccess }: AreaFormProps) {
-  const [countries, setCountries] = useState<Country[]>([]);
+export function BenefitTypeForm({ initialData, onSuccess }: BenefitTypeFormProps) {
   const isEditing = !!initialData;
 
   const [state, formAction, isPending] = useActionState(
-    async (prevState: any, data: AreaFormType) => {
+    async (prevState: any, data: BenefitTypeFormType) => {
       if (isEditing) {
-        return updateArea(initialData.areaId, prevState, data);
+        return updateBenefitType(initialData.benefitTypeId, prevState, data);
       } else {
-        return createArea(prevState, data);
+        return createBenefitType(prevState, data);
       }
     },
     { success: false, message: '', timestamp: 0 }
@@ -35,17 +32,13 @@ export function AreaForm({ initialData, onSuccess }: AreaFormProps) {
 
   const lastTimestamp = useRef(state.timestamp);
 
-  const form = useForm<AreaFormType>({
-    resolver: zodResolver(areaFormSchema),
+  const form = useForm<BenefitTypeFormType>({
+    resolver: zodResolver(benefitTypeFormSchema),
     defaultValues: {
-      areaName: initialData?.areaName || "",
-      countryCode: initialData?.countryCode || "",
+      title: initialData?.title || "",
+      description: initialData?.description || "",
     },
   });
-
-  useEffect(() => {
-    getCountries().then(setCountries);
-  }, []);
 
   useEffect(() => {
     if (state?.timestamp && state.timestamp !== lastTimestamp.current) {
@@ -63,7 +56,7 @@ export function AreaForm({ initialData, onSuccess }: AreaFormProps) {
     }
   }, [state, onSuccess]);
 
-  function onSubmit(data: AreaFormType) {
+  function onSubmit(data: BenefitTypeFormType) {
     startTransition(() => {
       formAction(data);
     });
@@ -73,18 +66,20 @@ export function AreaForm({ initialData, onSuccess }: AreaFormProps) {
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
       <FieldInput
         control={form.control}
-        name="areaName"
-        label="Nombre del Área"
-        placeholder="Ej. Tecnología"
+        name="title"
+        label="Nombre del Tipo"
+        placeholder="Ej. Salud, Financiero"
+        Icon={Tag}
+        disabled={isPending}
       />
 
-      <SelectInput
+      <FieldInput
         control={form.control}
-        name="countryCode"
-        label="País"
-        placeholder="Selecciona un país"
-        options={countries.map(c => ({ label: c.name, value: c.code }))}
-        Icon={Globe}
+        name="description"
+        label="Descripción (Opcional)"
+        placeholder="Breve descripción de la categoría"
+        Icon={FileText}
+        disabled={isPending}
       />
 
       <div className="flex justify-end pt-4">

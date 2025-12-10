@@ -8,7 +8,6 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
  */
 const PUBLIC_ENDPOINTS = [
   '/auth/login',
-  '/auth/register',
   '/auth/refresh',
   '/auth/forgot-password',
   '/auth/reset-password',
@@ -100,6 +99,12 @@ async function request(
         throw new Error('Sesión expirada. Por favor, inicia sesión de nuevo.');
       }
     }
+
+    const errorData = await res.json().catch(() => null);
+    const errorMessage = Array.isArray(errorData?.message) 
+      ? errorData.message.join(', ') 
+      : errorData?.message || `Error ${res.status}: ${res.statusText}`;
+    throw new Error(errorMessage);
   }
 
   if (res.status === 204) {

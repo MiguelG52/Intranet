@@ -36,7 +36,7 @@ const FieldInput = <T extends FieldValues>({
               placeholder={placeholder}
               required={isRequired}
               disabled={disabled}
-              className={`pl-${Icon ? '10' : '4'} border-0 shadow-none bg-transparent`}
+              className={`pl-${Icon ? '2' : '4'} border-0 shadow-none bg-transparent`}
             />
 
           </div>

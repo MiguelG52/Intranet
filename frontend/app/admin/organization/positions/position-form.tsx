@@ -3,13 +3,11 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useActionState, startTransition, useRef } from "react";
 import { PositionFormType, positionFormSchema } from "@/lib/schemas/Components/Forms/position-form.schema";
 import { createPosition, updatePosition } from "@/lib/actions/organization/organization.actions";
-import { getAreas } from "@/lib/actions/common/common.actions";
-import { getUsers } from "@/lib/actions/users/users.actions";
+import { getAreas, getPositions } from "@/lib/actions/common/common.actions";
 import { Position, Area } from "@/lib/schemas/types/types";
-import { UserProfile } from "@/lib/schemas/responses/users.response";
 import FieldInput from "@/components/common/field-input/field-input";
 import SelectInput from "@/components/common/select-input/select-input";
 import { toast } from "sonner";
@@ -21,10 +19,22 @@ interface PositionFormProps {
 }
 
 export function PositionForm({ initialData, onSuccess }: PositionFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
   const [areas, setAreas] = useState<Area[]>([]);
-  const [managers, setManagers] = useState<UserProfile[]>([]);
+  const [managers, setManagers] = useState<Position[]>([]);
   const isEditing = !!initialData;
+
+  const [state, formAction, isPending] = useActionState(
+    async (prevState: any, data: PositionFormType) => {
+      if (isEditing) {
+        return updatePosition(initialData.positionId, prevState, data);
+      } else {
+        return createPosition(prevState, data);
+      }
+    },
+    { success: false, message: '', timestamp: 0 }
+  );
+
+  const lastTimestamp = useRef(state.timestamp);
 
   const form = useForm<PositionFormType>({
     resolver: zodResolver(positionFormSchema),
@@ -35,35 +45,45 @@ export function PositionForm({ initialData, onSuccess }: PositionFormProps) {
     },
   });
 
+  const selectedAreaId = form.watch("areaId");
+
   useEffect(() => {
     getAreas().then(setAreas);
-    getUsers({ limit: 100 }).then(res => setManagers(res.data));
+    getPositions().then(setManagers);
   }, []);
 
-  async function onSubmit(data: PositionFormType) {
-    setIsLoading(true);
-    try {
-      const result = isEditing
-        ? await updatePosition(initialData.positionId, data)
-        : await createPosition(data);
+  useEffect(() => {
+    if (selectedAreaId) {
+      const currentManagerId = form.getValues("managerId");
+      if (currentManagerId) {
+        const manager = managers.find(m => m.positionId === currentManagerId);
+        if (manager && manager.areaId !== selectedAreaId) {
+          form.setValue("managerId", "");
+        }
+      }
+    }
+  }, [selectedAreaId, managers, form]);
 
-      if (result.success) {
+  useEffect(() => {
+    if (state?.timestamp && state.timestamp !== lastTimestamp.current) {
+      lastTimestamp.current = state.timestamp;
+      if (state.success) {
         toast.success("Éxito", {
-          description: result.message,
+          description: state.message,
         });
         onSuccess();
       } else {
         toast.error("Error", {
-          description: result.message,
+          description: state.message,
         });
       }
-    } catch (error) {
-      toast.error("Error", {
-        description: "Ocurrió un error inesperado",
-      });
-    } finally {
-      setIsLoading(false);
     }
+  }, [state, onSuccess]);
+
+  function onSubmit(data: PositionFormType) {
+    startTransition(() => {
+      formAction(data);
+    });
   }
 
   return (
@@ -88,15 +108,21 @@ export function PositionForm({ initialData, onSuccess }: PositionFormProps) {
       <SelectInput
         control={form.control}
         name="managerId"
-        label="Jefe Directo (Opcional)"
-        placeholder="Selecciona un jefe"
-        options={managers.map(user => ({ label: `${user.name} ${user.lastName}`, value: user.id }))}
+        label="Cargo Superior (Opcional)"
+        placeholder="Selecciona el cargo superior"
+        options={managers
+          .filter(pos => {
+            if (initialData && pos.positionId === initialData.positionId) return false;
+            if (selectedAreaId && pos.areaId !== selectedAreaId) return false;
+            return true;
+          })
+          .map(pos => ({ label: pos.title, value: pos.positionId }))}
         Icon={User}
       />
 
       <div className="flex justify-end pt-4">
-        <Button type="submit" disabled={isLoading}>
-          {isLoading ? "Guardando..." : isEditing ? "Actualizar" : "Registrar"}
+        <Button type="submit" disabled={isPending}>
+          {isPending ? "Guardando..." : isEditing ? "Actualizar" : "Registrar"}
         </Button>
       </div>
     </form>

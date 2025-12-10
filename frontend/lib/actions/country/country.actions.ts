@@ -15,32 +15,34 @@ export async function getCountries(): Promise<Country[]> {
   }
 }
 
-export async function createCountry(data: CountryFormType) {
+export async function createCountry(prevState: any, data: CountryFormType) {
   try {
-    await api.post('/country/register', data);
-    revalidatePath('/admin/countrys');
-    return { success: true, message: 'País creado correctamente' };
+    const res = await api.post('/country/register', data);
+    console.log(res)
+    revalidatePath('/admin/organization/countries');
+    return { success: true, message: 'País creado correctamente', timestamp: Date.now() };
   } catch (error: any) {
     console.error('Error creating country:', error);
-    return { success: false, message: error.message || 'Error al crear el país' };
+    return { success: false, message: error.message || 'Error al crear el país', timestamp: Date.now() };
   }
 }
 
-export async function updateCountry(code: string, data: Partial<CountryFormType>) {
+export async function updateCountry(code: string, prevState: any, data: Partial<CountryFormType>) {
   try {
-    await api.patch(`/country/${code}`, data);
-    revalidatePath('/admin/countrys');
-    return { success: true, message: 'País actualizado correctamente' };
+    const res =await api.patch(`/country/${code}`, data);
+    console.log(res)
+    revalidatePath('/admin/organization/countries');
+    return { success: true, message: 'País actualizado correctamente', timestamp: Date.now() };
   } catch (error: any) {
     console.error('Error updating country:', error);
-    return { success: false, message: error.message || 'Error al actualizar el país' };
+    return { success: false, message: error.message || 'Error al actualizar el país', timestamp: Date.now() };
   }
 }
 
 export async function deleteCountry(code: string) {
   try {
     await api.delete(`/country/${code}`);
-    revalidatePath('/admin/countrys');
+    revalidatePath('/admin/organization/countries');
     return { success: true, message: 'País eliminado correctamente' };
   } catch (error: any) {
     console.error('Error deleting country:', error);

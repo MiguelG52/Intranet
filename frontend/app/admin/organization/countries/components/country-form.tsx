@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useActionState, startTransition, useEffect, useRef } from "react";
 import { CountryFormType, countryFormSchema } from "@/lib/schemas/Components/Forms/country-form.schema";
 import { createCountry, updateCountry } from "@/lib/actions/country/country.actions";
 import { Country } from "@/lib/schemas/responses/country.response";
@@ -17,8 +17,20 @@ interface CountryFormProps {
 }
 
 export function CountryForm({ initialData, onSuccess }: CountryFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
   const isEditing = !!initialData;
+
+  const [state, formAction, isPending] = useActionState(
+    async (prevState: any, data: CountryFormType) => {
+      if (isEditing) {
+        return updateCountry(initialData.code, prevState, data);
+      } else {
+        return createCountry(prevState, data);
+      }
+    },
+    { success: false, message: '', timestamp: 0 }
+  );
+
+  const lastTimestamp = useRef(state.timestamp);
 
   const form = useForm<CountryFormType>({
     resolver: zodResolver(countryFormSchema),
@@ -29,30 +41,26 @@ export function CountryForm({ initialData, onSuccess }: CountryFormProps) {
     },
   });
 
-  async function onSubmit(data: CountryFormType) {
-    setIsLoading(true);
-    try {
-      const result = isEditing
-        ? await updateCountry(initialData.code, data)
-        : await createCountry(data);
-
-      if (result.success) {
+  useEffect(() => {
+    if (state?.timestamp && state.timestamp !== lastTimestamp.current) {
+      lastTimestamp.current = state.timestamp;
+      if (state.success) {
         toast.success("Éxito", {
-          description: result.message,
+          description: state.message,
         });
         onSuccess();
       } else {
         toast.error("Error", {
-          description: result.message,
+          description: state.message,
         });
       }
-    } catch (error) {
-      toast.error("Error", {
-        description: "Ha ocurrido un error inesperado",
-      });
-    } finally {
-      setIsLoading(false);
     }
+  }, [state, onSuccess]);
+
+  function onSubmit(data: CountryFormType) {
+    startTransition(() => {
+      formAction(data);
+    });
   }
 
   return (
@@ -62,7 +70,7 @@ export function CountryForm({ initialData, onSuccess }: CountryFormProps) {
           name="code"
           label="Código"
           placeholder="ES"
-          disabled={isEditing || isLoading}
+          disabled={isEditing || isPending}
           description="El código ISO del país (ej. ES, MX)"
         />
         
@@ -71,7 +79,7 @@ export function CountryForm({ initialData, onSuccess }: CountryFormProps) {
           name="name"
           label="Nombre"
           placeholder="España"
-          disabled={isLoading}
+          disabled={isPending}
         />
 
         <FieldInput
@@ -79,12 +87,12 @@ export function CountryForm({ initialData, onSuccess }: CountryFormProps) {
           name="phoneCountryCode"
           label="Código Telefónico"
           placeholder="+34"
-          disabled={isLoading}
+          disabled={isPending}
         />
 
         <div className="flex justify-end gap-2 pt-4">
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Guardando..." : isEditing ? "Actualizar" : "Crear"}
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Guardando..." : isEditing ? "Actualizar" : "Crear"}
           </Button>
         </div>
       </form>

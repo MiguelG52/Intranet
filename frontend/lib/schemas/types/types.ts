@@ -20,3 +20,19 @@ export interface Position {
   areaId: string;
   managerId?: string;
 }
+
+export interface BenefitType {
+  benefitTypeId: string;
+  title: string;
+  description?: string;
+}
+
+export interface Benefit {
+  benefitId: string;
+  title: string;
+  description?: string;
+  countryCode: string;
+  benefitTypeId: string;
+  benefitType?: BenefitType;
+  country?: Country;
+}

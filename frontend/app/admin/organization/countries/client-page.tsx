@@ -5,12 +5,13 @@ import { deleteCountry } from '@/lib/actions/country/country.actions'
 import { Country } from '@/lib/schemas/responses/country.response'
 import { OrganizationListItem } from '../components/organization-list-item'
 import { Badge } from '@/components/ui/badge'
-import { CountryDialog } from '../../countrys/components/country-dialog'
+import { CountryDialog } from './components/country-dialog'
 import { DeleteConfirmDialog } from '../components/delete-confirm-dialog'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Plus, Search } from 'lucide-react'
+import { AdminPageHeader } from '@/components/common/header/admin-page-header'
 import { useRouter } from 'next/navigation'
 
 interface CountriesClientPageProps {
@@ -42,7 +43,7 @@ export function CountriesClientPage({ initialData }: CountriesClientPageProps) {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
       const query = e.target.value
       setSearchQuery(query)
-      // Filter logic is in useEffect
+    
   }
 
   const onSuccess = () => {
@@ -70,24 +71,13 @@ export function CountriesClientPage({ initialData }: CountriesClientPageProps) {
 
   return (
     <div className="space-y-6">
-        <div className="flex flex-col md:flex-row justify-end items-center gap-4">
-            <div className="relative flex-1 md:w-64 md:flex-none">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input 
-                    placeholder="Buscar países..." 
-                    value={searchQuery}
-                    onChange={handleSearch}
-                    className="pl-9 rounded-xl border-gray-200 bg-white focus:bg-white transition-colors"
-                />
-            </div>
-            <Button 
-                onClick={() => setIsCreateOpen(true)}
-                className="rounded-xl bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20"
-            >
-                <Plus className="mr-2 h-4 w-4" />
-                Agregar País
-            </Button>
-        </div>
+        <AdminPageHeader
+            searchPlaceholder="Buscar países..."
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            addButtonText="Agregar País"
+            onAddClick={() => setIsCreateOpen(true)}
+        />
 
         <div className="space-y-4">
             {filteredData.map((country) => (
