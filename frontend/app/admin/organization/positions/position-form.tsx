@@ -54,15 +54,22 @@ export function PositionForm({ initialData, onSuccess }: PositionFormProps) {
 
   useEffect(() => {
     if (selectedAreaId) {
+      // Check if the selected area has any OTHER positions (excluding current if editing)
+      const hasPositionsInArea = managers.some(m => 
+        m.areaId === selectedAreaId && 
+        (!initialData || m.positionId !== initialData.positionId)
+      );
+
       const currentManagerId = form.getValues("managerId");
       if (currentManagerId) {
         const manager = managers.find(m => m.positionId === currentManagerId);
-        if (manager && manager.areaId !== selectedAreaId) {
+        // If the area has positions, enforce that the manager must be from the same area
+        if (hasPositionsInArea && manager && manager.areaId !== selectedAreaId) {
           form.setValue("managerId", "");
         }
       }
     }
-  }, [selectedAreaId, managers, form]);
+  }, [selectedAreaId, managers, form, initialData]);
 
   useEffect(() => {
     if (state?.timestamp && state.timestamp !== lastTimestamp.current) {
@@ -113,7 +120,17 @@ export function PositionForm({ initialData, onSuccess }: PositionFormProps) {
         options={managers
           .filter(pos => {
             if (initialData && pos.positionId === initialData.positionId) return false;
-            if (selectedAreaId && pos.areaId !== selectedAreaId) return false;
+            
+            // Check if the selected area has any OTHER positions
+            const hasPositionsInArea = managers.some(m => 
+              m.areaId === selectedAreaId && 
+              (!initialData || m.positionId !== initialData.positionId)
+            );
+
+            // If the area has positions, restrict to that area. 
+            // Otherwise (new area or top position), allow all.
+            if (selectedAreaId && hasPositionsInArea && pos.areaId !== selectedAreaId) return false;
+            
             return true;
           })
           .map(pos => ({ label: pos.title, value: pos.positionId }))}

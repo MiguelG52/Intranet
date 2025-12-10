@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
 
 export async function createArea(prevState: any, data: AreaFormType) {
   try {
-    await api.post('/areas', data);
+    await api.post('/areas/register', data);
     revalidatePath('/admin/organization/areas');
     return { success: true, message: 'Área creada correctamente', timestamp: Date.now() };
   } catch (error: any) {
@@ -20,7 +20,7 @@ export async function createArea(prevState: any, data: AreaFormType) {
 
 export async function updateArea(id: string, prevState: any, data: Partial<AreaFormType>) {
   try {
-    await api.patch(`/areas/${id}`, data);
+    await api.patch(`/areas/update/${id}`, data);
     revalidatePath('/admin/organization/areas');
     return { success: true, message: 'Área actualizada correctamente', timestamp: Date.now() };
   } catch (error: any) {
@@ -31,7 +31,7 @@ export async function updateArea(id: string, prevState: any, data: Partial<AreaF
 
 export async function deleteArea(id: string) {
   try {
-    await api.delete(`/areas/${id}`);
+    await api.delete(`/areas/delete/${id}`);
     revalidatePath('/admin/organization/areas');
     return { success: true, message: 'Área eliminada correctamente' };
   } catch (error: any) {

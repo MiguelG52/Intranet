@@ -7,6 +7,7 @@ import { Search, Users, Network } from "lucide-react";
 import { UserProfile } from '@/lib/schemas/responses/users.response';
 import { OrgChart } from '@/components/common/tree/org-chart';
 import { DirectoryList } from './directory-list';
+import { LiquidHeader } from '@/components/common/header/liquid-header';
 
 
 interface DirectoryContentProps {
@@ -28,21 +29,23 @@ export function DirectoryContent({ initialUsers }: DirectoryContentProps) {
 
   return (
     <>
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 bg-white p-6 rounded-lg shadow-md">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Directorio de Empleados</h1>
-          <p className="text-gray-500">Encuentra y conecta con tu equipo</p>
-        </div>
-        <div className="relative w-full md:w-96">
+      <LiquidHeader
+        title="Directorio de Empleados"
+        subtitle="Encuentra y conecta con tu equipo"
+        icon={Users}
+      />
+
+      <div className="mb-8 mt-6">
+        <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <Input 
             placeholder="Buscar por nombre, cargo, departamento..." 
-            className="pl-10 border-primary"
+            className="pl-10 border-gray-200 h-12 rounded-xl"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-      </header>
+      </div>
 
       <Tabs defaultValue="directory" className="w-full">
         <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
@@ -56,17 +59,19 @@ export function DirectoryContent({ initialUsers }: DirectoryContentProps) {
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="directory" className="mt-6">
-          <DirectoryList 
-            key={activeSearch} 
-            search={activeSearch} 
-            initialUsers={activeSearch === '' ? initialUsers : []} 
-          />
-        </TabsContent>
+        <div className="mt-6 min-h-[400px] rounded-3xl bg-white/50 p-6 shadow-xl ring-1 ring-gray-900/5 backdrop-blur-xl">
+          <TabsContent value="directory" className="mt-0">
+            <DirectoryList 
+              key={activeSearch} 
+              search={activeSearch} 
+              initialUsers={activeSearch === '' ? initialUsers : []} 
+            />
+          </TabsContent>
 
-        <TabsContent value="org-chart">
-          <OrgChart />
-        </TabsContent>
+          <TabsContent value="org-chart" className="mt-0">
+            <OrgChart />
+          </TabsContent>
+        </div>
       </Tabs>
     </>
   );

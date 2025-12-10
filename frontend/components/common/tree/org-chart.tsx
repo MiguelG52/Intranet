@@ -32,11 +32,11 @@ export function OrgChart() {
   }
 
   return (
-    <div className="overflow-auto p-8 bg-gray-50 rounded-lg min-h-[600px]">
+    <div className="overflow-auto p-8 min-h-[600px]">
       <div className="tree min-w-max flex justify-center">
         <ul>
           {data.map((root) => (
-            <OrgNode key={root.positionId} node={root} />
+            <OrgNode key={root.positionId} node={root} level={1} />
           ))}
         </ul>
       </div>
