@@ -13,7 +13,7 @@ export enum PrivateRoutes {
   BENEFICIOS = '/benefits',
   DIRECTORIO = '/directory',
   TIEMPO_LIBRE = '/free-time',
-  CURSOS = '/courses',
+  CURSOS = '/university',
   ENCUESTAS = '/quiz',
   DOCUMENTOS = '/documents',
   ADMIN = '/admin',

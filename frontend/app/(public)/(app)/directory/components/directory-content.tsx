@@ -7,7 +7,7 @@ import { Search, Users, Network } from "lucide-react";
 import { UserProfile } from '@/lib/schemas/responses/users.response';
 import { OrgChart } from '@/components/common/tree/org-chart';
 import { DirectoryList } from './directory-list';
-import { LiquidHeader } from '@/components/common/header/liquid-header';
+import { GradientHeader } from '@/components/common/header/gradient-header';
 
 
 interface DirectoryContentProps {
@@ -29,10 +29,10 @@ export function DirectoryContent({ initialUsers }: DirectoryContentProps) {
 
   return (
     <>
-      <LiquidHeader
+      <GradientHeader
         title="Directorio de Empleados"
         subtitle="Encuentra y conecta con tu equipo"
-        icon={Users}
+        className="py-0"
       />
 
       <div className="mb-8 mt-6">

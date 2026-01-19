@@ -200,3 +200,31 @@
   border-left: 1px solid #ccc;
   width: 0; height: 20px;
 }
+
+@keyframes marquee-vertical {
+  from { transform: translateY(0); }
+  to { transform: translateY(-33.333%); }
+}
+
+.animate-marquee-vertical {
+  animation: marquee-vertical 40s linear infinite;
+}
+
+@keyframes marquee-vertical-reverse {
+  from { transform: translateY(-33.333%); }
+  to { transform: translateY(0); }
+}
+
+.animate-marquee-vertical-reverse {
+  animation: marquee-vertical-reverse 40s linear infinite;
+}
+
+@keyframes gradient {
+     0% { background-position: 0% 50%; }
+     50% { background-position: 100% 50%; }
+     100% { background-position: 0% 50%; }
+}
+
+.animate-gradient {
+  animation: gradient 8s linear infinite;
+}
