@@ -42,7 +42,6 @@ export async function loginUser(
 
   try {
     const response = await api.post('/auth/login', data) as SignInResponse;
-    console.log('Login response:', response);
     
     (await cookies()).set('access_token', response.accessToken, {
       httpOnly: true,

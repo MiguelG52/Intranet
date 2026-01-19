@@ -8,7 +8,6 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
  */
 const PUBLIC_ENDPOINTS = [
   '/auth/login',
-  '/auth/register',
   '/auth/refresh',
   '/auth/forgot-password',
   '/auth/reset-password',
@@ -39,16 +38,23 @@ async function request(
     ...(options.headers as Record<string, string>),
   };
 
-  if (accessToken) {
+  if (accessToken && !defaultHeaders['Authorization']) {
     defaultHeaders['Authorization'] = `Bearer ${accessToken}`;
   }
-
-
-  const res = await fetch(url, {
+  let res;
+  if(options.method !== 'GET'){
+     res = await fetch(url, {
+    cache: 'no-store',
     ...options,
     headers: defaultHeaders,
-    cache: 'no-store', 
   });
+  }else{
+    res = await fetch(url, {
+    cache: 'force-cache',
+    ...options,
+    headers: defaultHeaders,
+  });
+  }
 
   console.log('API Request:', res.url, res.status);
 
@@ -63,25 +69,42 @@ async function request(
         const newAccessToken = await getNewAccessToken();
         
         // Si lo logramos, guardamos el nuevo token en las cookies
-        (await cookies()).set('access_token', newAccessToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          path: '/',
-        });
+        try {
+          (await cookies()).set('access_token', newAccessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            path: '/',
+          });
+        } catch (error) {
+          // Ignoramos el error si estamos en un Server Component (no se pueden modificar cookies)
+        }
 
         // Reintentamos la petición original, ahora con el nuevo token
-        return request(endpoint, options, true); 
+        return request(endpoint, {
+          ...options,
+          headers: {
+            ...(options.headers as Record<string, string>),
+            Authorization: `Bearer ${newAccessToken}`,
+          },
+        }, true); 
       } catch (refreshError) {
         // Si el refresco falla, borramos las cookies y forzamos el logout
         console.error('Fallo al refrescar el token.', refreshError);
-        (await cookies()).delete('access_token');
-        (await cookies()).delete('refresh_token');
+        try {
+          (await cookies()).delete('access_token');
+          (await cookies()).delete('refresh_token');
+        } catch (error) {
+          // Ignoramos el error si estamos en un Server Component
+        }
         throw new Error('Sesión expirada. Por favor, inicia sesión de nuevo.');
       }
     }
 
-    const errorData = await res.json();
-    throw new Error(errorData.message || 'Error en la petición a la API');
+    const errorData = await res.json().catch(() => null);
+    const errorMessage = Array.isArray(errorData?.message) 
+      ? errorData.message.join(', ') 
+      : errorData?.message || `Error ${res.status}: ${res.statusText}`;
+    throw new Error(errorMessage);
   }
 
   if (res.status === 204) {
