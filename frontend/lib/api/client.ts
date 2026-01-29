@@ -35,6 +35,7 @@ async function request(
 
   const defaultHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
+    'x-api-key': process.env.DEV_API_KEY || '',
     ...(options.headers as Record<string, string>),
   };
 
@@ -124,7 +125,10 @@ async function getNewAccessToken(): Promise<string> {
 
   const res = await fetch(`${API_URL}/auth/refresh`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json', 
+      'x-api-key': process.env.NEXT_PUBLIC_DEV_API_KEY || ''
+    },
     body: JSON.stringify({ refreshToken }),
   });
 
