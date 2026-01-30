@@ -8,8 +8,7 @@ import { CorporateBenefits } from "./components/corporate-benefits"
 export default function BenefitsPage() {
   return (
     <div className="container mx-auto p-4 md:p-8 space-y-12 max-w-[1600px] min-h-screen relative">
-       <CornerGradient />
-       
+              
        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-12">
        <GradientHeader
         title="Gestión de Beneficios"

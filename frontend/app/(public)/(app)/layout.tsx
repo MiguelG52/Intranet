@@ -32,7 +32,7 @@ export default async function RootLayout({
                   orientation="vertical"
                   className="mr-2 data-[orientation=vertical]:h-4"
                 />
-                <RouteBreadcrumbs baseLabel="Intranet" baseHref="/home" />
+                <RouteBreadcrumbs baseLabel="Intranet" baseHref="/" />
               </div>
             </header>
           <main className="relative z-10">
