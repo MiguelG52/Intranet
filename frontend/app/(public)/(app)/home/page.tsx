@@ -13,10 +13,11 @@ const HomePage = () => {
 
   return (
     <div className="public-container">
-      {/* Header Section */}
-      <WelcomeHeader />
+      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+        {/* Header Section */}
+        <WelcomeHeader />
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         {/* Left Column: Warning & Calendar */}
         <div className="md:col-span-3 space-y-6">
           <WarningWidget />
@@ -43,6 +44,7 @@ const HomePage = () => {
           <NewsListWidget />
           
         </div>
+      </div>
       </div>
     </div>
   );

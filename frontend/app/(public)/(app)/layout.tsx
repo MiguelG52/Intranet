@@ -6,6 +6,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { SessionProvider } from "@/lib/context/session-provider";
 import { cookies } from "next/headers";
 import { Suspense } from "react";
+import { CornerGradient } from "@/components/common/background/corner-gradient";
 
 export default async function RootLayout({
   children,
@@ -22,8 +23,9 @@ export default async function RootLayout({
     <SessionProvider>
       <SidebarProvider defaultOpen={defaultOpen}>
         <PublicSidebar />
-        <SidebarInset>
-              <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+        <SidebarInset className="bg-transparent/50">
+          <CornerGradient />
+              <header className="relative z-10 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
               <div className="flex items-center gap-2 px-4">
                 <SidebarTrigger className="-ml-1" />
                 <Separator
@@ -33,7 +35,7 @@ export default async function RootLayout({
                 <RouteBreadcrumbs baseLabel="Intranet" baseHref="/home" />
               </div>
             </header>
-          <main>
+          <main className="relative z-10">
             <Suspense fallback={null}>
               {children}
             </Suspense>

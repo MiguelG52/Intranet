@@ -9,25 +9,27 @@ export default async function NewsPage() {
 
   return (
     <div className="public-container space-y-8">
-      <GradientHeader
-        title="Últimas Noticias"
-        subtitle="Mantente informado con las últimas novedades en ciberseguridad"
-        className="py-0"
-      />
-      
-      <main>
-        <div className="min-h-[400px] rounded-3xl bg-white/50 p-6 shadow-xl ring-1 ring-gray-900/5 backdrop-blur-xl">
-          <Suspense 
-            fallback={
-              <div className="flex h-[50vh] items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            }
-          >
-            <NewsGrid initialNews={initialNews} />
-          </Suspense>
-        </div>
-      </main>
+      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+        <GradientHeader
+          title="Últimas Noticias"
+          subtitle="Mantente informado con las últimas novedades en ciberseguridad"
+          className="py-0"
+        />
+        
+        <main>
+          <div className="min-h-[400px] rounded-3xl bg-white/50 p-6 shadow-xl ring-1 ring-gray-900/5 backdrop-blur-xl">
+            <Suspense 
+              fallback={
+                <div className="flex h-[50vh] items-center justify-center">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                </div>
+              }
+            >
+              <NewsGrid initialNews={initialNews} />
+            </Suspense>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

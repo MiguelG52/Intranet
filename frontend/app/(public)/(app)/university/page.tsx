@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 export default function UniversityPage() {
   return (
     <div className="public-container">
+      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start py-8">
             {/* Left Column: Text Content */}
             <div className="order-2 lg:order-1 space-y-8 sticky top-8">
@@ -79,6 +80,7 @@ export default function UniversityPage() {
                 <UniversityCarousel />
             </div>
         </div>
+      </div>
     </div>
   )
 }

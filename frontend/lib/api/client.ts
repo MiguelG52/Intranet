@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -97,8 +98,14 @@ async function request(
         } catch (error) {
           // Ignoramos el error si estamos en un Server Component
         }
-        throw new Error('Sesión expirada. Por favor, inicia sesión de nuevo.');
+        // Redirigir al usuario al login en lugar de lanzar error
+        redirect('/auth/login');
       }
+    }
+
+    // Si es 401 y no se pudo refrescar (por falta de token o endpoint publico mal configurado)
+    if (res.status === 401) {
+        redirect('/auth/login');
     }
 
     const errorData = await res.json().catch(() => null);
