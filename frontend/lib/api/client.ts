@@ -67,16 +67,27 @@ async function request(
 
     if (shouldRefresh) {
       try {
-        // Intenta obtener un nuevo token
-        const newAccessToken = await getNewAccessToken();
+        // Intenta obtener un nuevo token (y refresh token si hubo rotación)
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = await getNewAccessToken();
         
         // Si lo logramos, guardamos el nuevo token en las cookies
         try {
-          (await cookies()).set('access_token', newAccessToken, {
+          const cookieStore = await cookies();
+          
+          cookieStore.set('access_token', newAccessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             path: '/',
           });
+
+          // Si el backend devolvió un nuevo refresh token, lo actualizamos también
+          if (newRefreshToken) {
+            cookieStore.set('refresh_token', newRefreshToken, {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              path: '/',
+            });
+          }
         } catch (error) {
           // Ignoramos el error si estamos en un Server Component (no se pueden modificar cookies)
         }
@@ -124,7 +135,7 @@ async function request(
 /**
  * Pide un nuevo access token.
  */
-async function getNewAccessToken(): Promise<string> {
+async function getNewAccessToken(): Promise<{ accessToken: string; refreshToken?: string }> {
   const refreshToken = (await cookies()).get('refresh_token')?.value;
   if (!refreshToken) {
     throw new Error('No hay refresh token disponible.');
@@ -144,7 +155,10 @@ async function getNewAccessToken(): Promise<string> {
   }
 
   const data = await res.json();
-  return data.accessToken;
+  return {
+    accessToken: data.accessToken,
+    refreshToken: data.refreshToken,
+  };
 }
 
 export const api = {
