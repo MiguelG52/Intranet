@@ -11,11 +11,9 @@ const PublicSidebar = () => {
   { title: 'Noticias', url: PrivateRoutes.NEWS, icon: NewspaperIcon },
   { title: 'Beneficios', url: PrivateRoutes.BENEFICIOS, icon: Gift },
   { title: 'Directorio', url: PrivateRoutes.DIRECTORIO, icon: Users },
-  { title: 'Tiempo Libre', url: PrivateRoutes.TIEMPO_LIBRE, icon: Clock },
   { title: 'Universidad', url: PrivateRoutes.CURSOS, icon: BookOpen },
   { title: 'Encuestas', url: PrivateRoutes.ENCUESTAS, icon: ClipboardList },
   { title: 'Documentos', url: PrivateRoutes.DOCUMENTOS, icon: FileText },
-  { title: 'Configuración', url: PrivateRoutes.SETTINGS, icon: Settings },
   { title: 'Administración', url: PrivateRoutes.ADMIN, icon: ShieldUserIcon },
 ]
   return (

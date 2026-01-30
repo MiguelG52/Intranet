@@ -110,13 +110,13 @@ async function request(
           // Ignoramos el error si estamos en un Server Component
         }
         // Redirigir al usuario al login en lugar de lanzar error
-        redirect('/auth/login');
+        redirect('/');
       }
     }
 
     // Si es 401 y no se pudo refrescar (por falta de token o endpoint publico mal configurado)
     if (res.status === 401) {
-        redirect('/auth/login');
+        redirect('/');
     }
 
     const errorData = await res.json().catch(() => null);
