@@ -1,0 +1,15 @@
+import { LucideProps } from "lucide-react";
+import { ForwardRefExoticComponent, RefAttributes } from "react";
+import { Control, FieldValues, Path } from "react-hook-form";
+
+export type FileInputProps<T extends FieldValues> = {
+  Icon?: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
+  label?: string;
+  isRequired?: boolean;
+  iconColor?: string;
+  name: Path<T>;
+  control: Control<T>;
+  disabled?: boolean;
+  description?: string;
+  accept?: string;
+}

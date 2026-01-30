@@ -11,9 +11,11 @@ async function DirectoryList() {
 export default function DirectoryPage() {
   return (
     <div className="public-container">
-      <Suspense fallback={<Loading />}>
-        <DirectoryList />
-      </Suspense>
+      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <Suspense fallback={<Loading />}>
+          <DirectoryList />
+        </Suspense>
+      </div>
     </div>
   )
 }

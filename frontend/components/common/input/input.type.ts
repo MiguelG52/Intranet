@@ -8,5 +8,8 @@ export type InputProps = {
     placeholder?: string;
     isRequired?: boolean;
     iconColor?: string;
-    name:string
+    name:string;
+    value?: string;
+    readOnly?: boolean;
+    defaultValue?: string;
 }
